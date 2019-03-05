@@ -8,7 +8,9 @@ class MarkovMachine {
   constructor(text) {
     let words = text.split(/[ \r\n]+/);
     this.words = words.filter(c => c !== "");
+    this.uniqueWords = new Set(words);
     this.markovChain = this.makeChains();
+    // this.text = this.makeText();
   }
 
   /** set markov chains:
@@ -18,10 +20,9 @@ class MarkovMachine {
 
   makeChains() {
     const words = this.words
-    const uniqueWords = new Set(words)
     let markovChain = {}
 
-    uniqueWords.forEach(buildChainLink)
+    this.uniqueWords.forEach(buildChainLink)
 
     function buildChainLink(word) {
       markovChain[word] = [];
@@ -43,7 +44,45 @@ class MarkovMachine {
   /** return random text from chains */
 
   makeText(numWords = 100) {
-    // TODO
+    // curr_word 
+    // curr_key
+    // random_word
+
+    // the first time:
+      // get random key 
+        // add to text
+
+    // while text is less than numwords 
+      // get random word from key list 
+        // add to text
+        // save to curr_key
+    
+    let uniqueWordsArr = Array.from(this.uniqueWords);
+    let randomKeyIdx = Math.floor(Math.random() * (this.uniqueWords.size - 1));
+    let randomKey = uniqueWordsArr[randomKeyIdx];
+    let currKey = randomKey;
+    let text = [currKey];
+    let wordListLength = this.markovChain[currKey].length;
+    let randomWordIdx = function(){
+      return Math.floor(Math.random() * wordListLength)
+    }
+
+    console.log(text);
+
+    while (text.length <= numWords){
+      let wordList = this.markovChain[currKey];
+      console.log('wordList', wordList);
+      currKey = wordList[randomWordIdx()];
+      if (currKey === null){
+        break;
+      }
+      console.log('currKey', currKey);
+      console.log('markov', this.markovChain);
+      wordListLength = this.markovChain[currKey].length;
+      text.push(currKey); 
+    }
+
+    return text.join(' ');
   }
 }
 
