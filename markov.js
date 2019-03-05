@@ -8,7 +8,7 @@ class MarkovMachine {
   constructor(text) {
     let words = text.split(/[ \r\n]+/);
     this.words = words.filter(c => c !== "");
-    this.makeChains();
+    this.markovChain = this.makeChains();
   }
 
   /** set markov chains:
@@ -17,9 +17,28 @@ class MarkovMachine {
    *  {"the": ["cat", "hat"], "cat": ["in"], "in": ["the"], "hat": [null]} */
 
   makeChains() {
-    // TODO
-  }
+    const words = this.words
+    const uniqueWords = new Set(words)
+    let markovChain = {}
 
+    uniqueWords.forEach(buildChainLink)
+
+    function buildChainLink(word) {
+      markovChain[word] = [];
+      for (let i=0; i<words.length; i++) {
+        let currentWord = words[i]
+        if (currentWord === word) {
+          let possibleWord = words[i+1]
+          if (!possibleWord) {
+            markovChain[word].push(null)
+          } else {
+            markovChain[word].push(possibleWord)
+          }
+        }
+      }
+    }
+    return markovChain
+  }
 
   /** return random text from chains */
 
@@ -27,3 +46,5 @@ class MarkovMachine {
     // TODO
   }
 }
+
+module.exports = MarkovMachine
