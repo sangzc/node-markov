@@ -29,12 +29,8 @@ class MarkovMachine {
       for (let i=0; i<words.length; i++) {
         let currentWord = words[i]
         if (currentWord === word) {
-          let possibleWord = words[i+1]
-          if (!possibleWord) {
-            markovChain[word].push(null)
-          } else {
-            markovChain[word].push(possibleWord)
-          }
+          let possibleWord = words[i+1] || null
+          markovChain[word].push(possibleWord)
         }
       }
     }
@@ -67,17 +63,13 @@ class MarkovMachine {
       return Math.floor(Math.random() * wordListLength)
     }
 
-    console.log(text);
-
     while (text.length <= numWords){
       let wordList = this.markovChain[currKey];
-      console.log('wordList', wordList);
       currKey = wordList[randomWordIdx()];
-      if (currKey === null){
+
+      if (currKey === null) {
         break;
       }
-      console.log('currKey', currKey);
-      console.log('markov', this.markovChain);
       wordListLength = this.markovChain[currKey].length;
       text.push(currKey); 
     }
